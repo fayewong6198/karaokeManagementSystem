@@ -28,12 +28,12 @@ exports.userImageUpload = asyncHandler(async (req, res, next) => {
 
   // Create custom filename
   const image = await Image.create({
-    user: req.user.id
+    user: req.user.id,
   });
   file.name = `photo_${image._id}${path.parse(file.name).ext}`;
   image.path = file.name;
   console.log(file.name);
-  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
     if (err) {
       console.error(err);
 
@@ -71,12 +71,12 @@ exports.userAvatarUpload = asyncHandler(async (req, res, next) => {
 
   // Create custom filename
   const image = await Image.create({
-    user: req.user.id
+    user: req.user.id,
   });
   image.path = file.name;
   file.name = `photo_${product._id}${path.parse(file.name).ext}`;
   console.log(file.name);
-  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
     if (err) {
       console.error(err);
 
@@ -109,5 +109,22 @@ exports.changeAvatar = asyncHandler(async (req, res, next) => {
   user.avatar = file.image.path;
 
   await user.save();
+  res.status(200).json({ success: true, data: user });
+});
+
+// @des updateUser
+// @route Put /api/user/:id
+// @access  Admin
+exports.updateUser = asyncHandler(async (req, res, next) => {
+  let user = User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+  user = User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
   res.status(200).json({ success: true, data: user });
 });

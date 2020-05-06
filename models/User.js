@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-
+const Schedule = require("./Schedule");
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "please add a name"]
+    required: [true, "please add a name"],
   },
   email: {
     type: String,
@@ -14,38 +14,47 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     match: [
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please add a valid email"
-    ]
+      "Please add a valid email",
+    ],
   },
   role: {
     type: String,
-    enum: ["user"],
-    default: "user"
+    enum: ["staff"],
+    default: "staff",
   },
   password: {
     type: String,
     required: [true, "Please add a password"],
     minlength: 5,
-    select: false
+    select: false,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 
   isAuthentication: {
     type: Boolean,
-    default: true
+    default: true,
   },
   authenticationToken: String,
   confirmEmailExpire: Date,
 
+  status: {
+    type: String,
+    enum: ["online", "offline"],
+    default: "offline",
+  },
+  salary: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 // Encrypt password
-UserSchema.pre("save", async function(next) {
+UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
@@ -53,20 +62,25 @@ UserSchema.pre("save", async function(next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+UserSchema.pre("remove", async () => {
+  // Delete Schedule in database
+  await Schedule.deleteMany({ staff: this._id });
+});
+
 // Sign JWT and returnJwtToken
-UserSchema.methods.getSignedJwtToken = function() {
+UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE,
   });
 };
 
 // Compare Password
-UserSchema.methods.matchPassword = async function(enteredPassword) {
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Generate and hash password token
-UserSchema.methods.getResetPasswordToken = function() {
+UserSchema.methods.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString("hex");
 
@@ -83,7 +97,7 @@ UserSchema.methods.getResetPasswordToken = function() {
 };
 
 // Generate and hash confirm Email token
-UserSchema.methods.getConfirmEmailToken = function() {
+UserSchema.methods.getConfirmEmailToken = function () {
   // Generate token
   const confirmToken = crypto.randomBytes(20).toString("hex");
 

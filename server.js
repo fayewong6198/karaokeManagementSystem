@@ -20,10 +20,11 @@ const products = require("./routes/products");
 const auth = require("./routes/auth");
 const user = require("./routes/user");
 const categories = require("./routes/categories");
+const schedule = require("./routes/shedule");
+const payments = require("./routes/payments");
 
 const app = express();
 const server = require("http").Server(app);
-const io = require("socket.io")(server);
 
 // Session
 
@@ -58,6 +59,8 @@ app.use("/api/products", products);
 app.use("/api/auth", auth);
 app.use("/api/user", user);
 app.use("/api/categories", categories);
+app.use("/api/payments", payments);
+app.use("/api/schedule", schedule);
 
 app.use(errorHandler);
 

@@ -43,6 +43,10 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    number: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     toJSON: {
