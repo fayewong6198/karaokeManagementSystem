@@ -87,7 +87,7 @@ exports.userAvatarUpload = asyncHandler(async (req, res, next) => {
 
     await image.save();
 
-    const user = User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
 
     user.avatar = file.name;
 
@@ -104,7 +104,7 @@ exports.changeAvatar = asyncHandler(async (req, res, next) => {
 
   if (!image) return next(new ErrorResponse("Image not found", 404));
 
-  const user = User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
 
   user.avatar = file.image.path;
 
@@ -121,7 +121,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
   }
-  user = User.findByIdAndUpdate(req.params.id, req.body, {
+  user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -138,7 +138,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
   }
-  user = User.findByIdAndDelete(req.params.id);
+  user = await User.findByIdAndDelete(req.params.id);
 
   res.status(200).json({ success: true, data: user });
 });
