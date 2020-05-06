@@ -3,54 +3,71 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Schedule = require("./Schedule");
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "please add a name"],
-  },
-  email: {
-    type: String,
-    required: [true, "Please add a email"],
-    unique: true,
-    match: [
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please add a valid email",
-    ],
-  },
-  role: {
-    type: String,
-    enum: ["staff"],
-    default: "staff",
-  },
-  password: {
-    type: String,
-    required: [true, "Please add a password"],
-    minlength: 5,
-    select: false,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "please add a name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please add a email"],
+      unique: true,
+      match: [
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please add a valid email",
+      ],
+    },
+    role: {
+      type: String,
+      enum: ["staff"],
+      default: "staff",
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password"],
+      minlength: 5,
+      select: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
 
-  isAuthentication: {
-    type: Boolean,
-    default: true,
-  },
-  authenticationToken: String,
-  confirmEmailExpire: Date,
+    isAuthentication: {
+      type: Boolean,
+      default: true,
+    },
+    authenticationToken: String,
+    confirmEmailExpire: Date,
 
-  status: {
-    type: String,
-    enum: ["online", "offline"],
-    default: "offline",
+    status: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
+    },
+    salary: {
+      type: Number,
+      default: 0,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  salary: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
+
+ProductSchema.virtual("schedules", {
+  ref: "Schedule",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
 });
 
 // Encrypt password

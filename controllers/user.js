@@ -147,7 +147,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 // @route Get /api/user/:id
 // @access  Admin
 exports.getUser = asyncHandler(async (req, res, next) => {
-  let user = User.findById(req.params.id);
+  let user = await (await User.findById(req.params.id)).populate("schedule");
 
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
@@ -157,7 +157,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 });
 
 // @des get all User
-// @route Get /api/user/
+// @route Get /api/users/
 // @access  Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   let users = await User.find();
@@ -170,7 +170,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 
 // @des create User
-// @route Post /api/user/
+// @route Post /api/users/
 // @access  Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
   let user = await User.create(req.body);
