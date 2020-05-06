@@ -128,3 +128,55 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: user });
 });
+
+// @des deleteUser
+// @route Delete /api/user/:id
+// @access  Admin
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  let user = User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+  user = User.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({ success: true, data: user });
+});
+
+// @des get User
+// @route Get /api/user/:id
+// @access  Admin
+exports.getUser = asyncHandler(async (req, res, next) => {
+  let user = User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+
+  res.status(200).json({ success: true, data: user });
+});
+
+// @des get all User
+// @route Get /api/user/
+// @access  Admin
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+  let users = User.find();
+
+  if (!users) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+
+  res.status(200).json({ success: true, data: users });
+});
+
+// @des create User
+// @route Post /api/user/
+// @access  Admin
+exports.createUser = asyncHandler(async (req, res, next) => {
+  let user = await User.create(req.body);
+  if (!user) {
+    return next(new ErrorResponse("User not found", 404));
+  }
+
+  res.status(200).json({ success: true, data: user });
+});
