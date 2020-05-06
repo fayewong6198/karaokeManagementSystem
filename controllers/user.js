@@ -160,7 +160,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route Get /api/users/
 // @access  Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  let users = await User.find();
+  let users = await User.find().populate("schedules");
 
   if (!users) {
     return next(new ErrorResponse("User not found", 404));

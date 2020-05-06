@@ -11,8 +11,11 @@ const {
   deleteUser,
 } = require("../controllers/user");
 const { protect, roleProtect } = require("../middlewares/auth");
+const { getUserSchedules } = require("../controllers/schedules");
 
 const router = express.Router();
+
+router.use("/:id/schedules", protect, roleProtect("admin"), getUserSchedules);
 
 router.route("/image").post(protect, userImageUpload);
 router.route("/avatar").post(protect, userAvatarUpload);

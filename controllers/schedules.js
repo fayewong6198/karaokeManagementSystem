@@ -11,6 +11,15 @@ exports.getSchedules = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ success: true, data: schedules });
 });
 
+// @des View UserSchedule
+// @route GET /api/users/:id/schedules
+// @access  staff
+exports.getUserSchedules = asyncHandler(async (req, res, next) => {
+  const schedules = await Schedule.find({ user: req.params.id });
+
+  return res.status(200).json({ success: true, data: schedules });
+});
+
 // @des Get one schedule
 // @route GET /api/schedules/:id
 // @access  staff

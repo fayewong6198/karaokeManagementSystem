@@ -6,10 +6,9 @@ const {
   createSchedule,
   deleteSchedule,
 } = require("../controllers/schedules");
+const router = express.Router({ mergeParams: true });
 
 const { protect, roleProtect } = require("../middlewares/auth");
-
-const router = express.Router();
 
 router
   .route("/")
