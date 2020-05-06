@@ -5,7 +5,7 @@ const Schedule = require("../models/Schedule");
 // @des View all schedule
 // @route GET /api/schedules/
 // @access  staff
-exports.getschedules = asyncHandler(async (req, res, next) => {
+exports.getSchedules = asyncHandler(async (req, res, next) => {
   const schedules = await Schedule.find();
 
   return res.status(200).json({ success: true, data: schedules });
@@ -34,7 +34,7 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
 // @des Update schedule
 // @route PUT /api/schedules/:id
 // @access  Admin
-exports.updateschedule = asyncHandler(async (req, res, next) => {
+exports.updateSchedule = asyncHandler(async (req, res, next) => {
   let schedule = await Schedule.findById(req.params.id);
 
   if (!schedule) return next(new ErrorResponse("schedule not found", 404));
@@ -49,7 +49,7 @@ exports.updateschedule = asyncHandler(async (req, res, next) => {
 // @des Delete schedule
 // @route Delete /api/schedules/:id
 // @access  Admin
-exports.deleteschedule = asyncHandler(async (req, res, next) => {
+exports.deleteSchedule = asyncHandler(async (req, res, next) => {
   const schedule = await Schedule.findByIdAndRemove(req.params.id);
 
   if (!schedule) {

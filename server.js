@@ -20,7 +20,7 @@ const products = require("./routes/products");
 const auth = require("./routes/auth");
 const user = require("./routes/user");
 const categories = require("./routes/categories");
-const schedule = require("./routes/shedule");
+const schedule = require("./routes/schedules");
 const payments = require("./routes/payments");
 
 const app = express();

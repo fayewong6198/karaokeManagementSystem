@@ -73,9 +73,9 @@ PaymentSchema.pre("save", async () => {
 
   const products = await Product.find({ _id: { $in: productIds } });
 
-  products.forEach((product) => {
-    total += product.price * quantity[product._id];
-  });
+  for (let i = 0; i < products.length; i++) {
+    total += products[i].price * quantity[products[i]._id];
+  }
 
   this.total = total;
 
