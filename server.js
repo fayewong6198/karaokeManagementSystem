@@ -57,7 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Moute routers
 app.use("/api/products", products);
 app.use("/api/auth", auth);
-app.use("/api/user", user);
+app.use("/api/users", user);
 app.use("/api/categories", categories);
 app.use("/api/payments", payments);
 app.use("/api/schedule", schedule);
