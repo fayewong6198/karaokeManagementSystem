@@ -7,7 +7,7 @@ const {
   resetPassword,
   confirmEmail,
   activeAccount,
-  logout
+  logout,
 } = require("../controllers/auth");
 const { protect } = require("../middlewares/auth");
 

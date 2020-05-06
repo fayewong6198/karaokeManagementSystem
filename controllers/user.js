@@ -100,7 +100,7 @@ exports.userAvatarUpload = asyncHandler(async (req, res, next) => {
 // @route Put /api/user/avatar/:id
 // @access  Private
 exports.changeAvatar = asyncHandler(async (req, res, next) => {
-  const image = Image.find({ user: req.user.id, _id: req.params.id });
+  const image = await Image.find({ user: req.user.id, _id: req.params.id });
 
   if (!image) return next(new ErrorResponse("Image not found", 404));
 
@@ -116,7 +116,7 @@ exports.changeAvatar = asyncHandler(async (req, res, next) => {
 // @route Put /api/user/:id
 // @access  Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  let user = User.findById(req.params.id);
+  let user = await User.findById(req.params.id);
 
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
@@ -133,7 +133,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // @route Delete /api/user/:id
 // @access  Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  let user = User.findById(req.params.id);
+  let user = await User.findById(req.params.id);
 
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
@@ -160,7 +160,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route Get /api/user/
 // @access  Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  let users = User.find();
+  let users = await User.find();
 
   if (!users) {
     return next(new ErrorResponse("User not found", 404));
