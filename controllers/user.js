@@ -1,6 +1,7 @@
 const asyncHandler = require("../middlewares/async");
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
+const Schedule = require("../models/Schedule");
 
 // @des Upload image
 // @route POST /api/user/image
@@ -116,7 +117,7 @@ exports.changeAvatar = asyncHandler(async (req, res, next) => {
 // @route Put /api/user/:id
 // @access  Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  let user = await User.findById(req.params.id);
+  let user = await User.findById(req.params.id).populate("schedules");
 
   if (!user) {
     return next(new ErrorResponse("User not found", 404));
@@ -125,6 +126,19 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+
+  // Update new Schedule
+  const schedules = req.body.schedules;
+
+  // Delete old schedule
+  await Schedule.deleteMany({ user: user._id });
+
+  for (let i = 0; i < schedules.length; i++) {
+    schedules[i].user = user._id;
+    await Schedule.create(schedules[i]);
+  }
+
+  user = await User.findById(req.params.id).populate("schedules");
 
   res.status(200).json({ success: true, data: user });
 });
@@ -147,7 +161,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 // @route Get /api/user/:id
 // @access  Admin
 exports.getUser = asyncHandler(async (req, res, next) => {
-  let user = await (await User.findById(req.params.id)).populate("schedule");
+  let user = await User.findById(req.params.id).populate("schedules");
 
   if (!user) {
     return next(new ErrorResponse("User not found", 404));

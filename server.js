@@ -60,7 +60,7 @@ app.use("/api/auth", auth);
 app.use("/api/users", user);
 app.use("/api/categories", categories);
 app.use("/api/payments", payments);
-app.use("/api/schedule", schedule);
+app.use("/api/schedules", schedule);
 
 app.use(errorHandler);
 
