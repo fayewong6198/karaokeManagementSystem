@@ -5,7 +5,8 @@ const Image = require("./Image");
 const RoomSchema = new mongoose.Schema({
   roomId: {
     type: String,
-    unique: true,
+    required: [true, "Room ID is required"],
+    unique: [true, "Room with this ID has already exits"],
   },
   price: {
     type: Number,

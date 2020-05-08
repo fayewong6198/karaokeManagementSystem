@@ -9,12 +9,7 @@ const fs = require("fs");
 // @route GET /api/rooms
 // @access  Public
 exports.getRooms = asyncHandler(async (req, res, next) => {
-  const rooms = await Room.find();
-
-  res.status(200).json({
-    success: true,
-    data: rooms,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @des Get Room
