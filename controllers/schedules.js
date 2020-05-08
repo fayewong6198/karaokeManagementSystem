@@ -6,7 +6,7 @@ const Schedule = require("../models/Schedule");
 // @route GET /api/schedules/
 // @access  staff
 exports.getSchedules = asyncHandler(async (req, res, next) => {
-  const schedules = await Schedule.find();
+  const schedules = await Schedule.find().populate("staff", "name");
 
   return res.status(200).json({ success: true, data: schedules });
 });
@@ -15,7 +15,7 @@ exports.getSchedules = asyncHandler(async (req, res, next) => {
 // @route GET /api/users/:id/schedules
 // @access  staff
 exports.getUserSchedules = asyncHandler(async (req, res, next) => {
-  const schedules = await Schedule.find({ user: req.params.id });
+  const schedules = await Schedule.find({ staff: req.params.id });
 
   return res.status(200).json({ success: true, data: schedules });
 });
@@ -35,9 +35,15 @@ exports.getSchedule = asyncHandler(async (req, res, next) => {
 // @route POST /api/schedules/
 // @access  Admin
 exports.createSchedule = asyncHandler(async (req, res, next) => {
-  const schedule = await Schedule.create(req.body);
+  let schedules = req.body;
 
-  return res.status(200).json({ success: true, data: schedule });
+  let newSchedule = [];
+  for (let i = 0; i < schedules.length; i++) {
+    let schedule = await Schedule.create(schedules[i]);
+    newSchedule.push(schedule);
+  }
+
+  return res.status(200).json({ success: true, data: newSchedule });
 });
 
 // @des Update schedule
