@@ -22,6 +22,10 @@ const ScheduleSchema = new mongoose.Schema({
   end: {
     type: String,
   },
+  workingTime: {
+    type: String,
+    enum: ["moring", "afternoon", "evening"],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
