@@ -131,11 +131,11 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   const schedules = req.body.schedules;
 
   // Delete old schedule
-  await Schedule.deleteMany({ user: user._id });
+  await Schedule.deleteMany({ staff: user._id });
 
   for (let i = 0; i < schedules.length; i++) {
-    schedules[i].user = user._id;
-    await Schedule.create(schedules[i]);
+    schedules[i].staff = user._id;
+    let schedule = await Schedule.create(schedules[i]);
   }
 
   user = await User.findById(req.params.id).populate("schedules");

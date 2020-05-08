@@ -66,7 +66,7 @@ const UserSchema = new mongoose.Schema(
 UserSchema.virtual("schedules", {
   ref: "Schedule",
   localField: "_id",
-  foreignField: "user",
+  foreignField: "staff",
   justOne: false,
 });
 
