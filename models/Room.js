@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const Image = require("./Image");
 const RoomSchema = new mongoose.Schema({
-  roomID: {
+  roomId: {
     type: String,
     unique: true,
   },
@@ -14,6 +14,7 @@ const RoomSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["available", "notAvailable"],
+    default: "available",
   },
   createdAt: {
     type: Date,
@@ -42,5 +43,7 @@ RoomSchema.pre("remove", async () => {
 });
 
 RoomSchema.pre("save", async () => {});
+
+RoomSchema.index({ roomId: 1 }, { unique: true });
 
 module.exports = mongoose.model("Room", RoomSchema);

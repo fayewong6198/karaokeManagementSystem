@@ -22,6 +22,7 @@ const user = require("./routes/user");
 const categories = require("./routes/categories");
 const schedule = require("./routes/schedules");
 const payments = require("./routes/payments");
+const rooms = require("./routes/rooms");
 
 const app = express();
 const server = require("http").Server(app);
@@ -61,6 +62,7 @@ app.use("/api/users", user);
 app.use("/api/categories", categories);
 app.use("/api/payments", payments);
 app.use("/api/schedules", schedule);
+app.use("/api/rooms", rooms);
 
 app.use(errorHandler);
 
