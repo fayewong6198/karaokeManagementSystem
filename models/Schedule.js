@@ -24,7 +24,7 @@ const ScheduleSchema = new mongoose.Schema({
   },
   workingTime: {
     type: String,
-    enum: ["moring", "afternoon", "evening"],
+    enum: ["morning", "afternoon", "evening"],
   },
   createdAt: {
     type: Date,
