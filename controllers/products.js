@@ -150,30 +150,34 @@ exports.deleteProductImage = asyncHandler(async (req, res, next) => {
 // @route PUT /api/products/:id/image
 // @access  Private
 exports.productImageUpload = asyncHandler(async (req, res, next) => {
+  console.log(1);
   const product = await Product.findById(req.params.id);
 
   if (!product) {
     return next(new ErrorResponse(`Error`, 404));
   }
-
+  console.log(2);
   console.log(req.files);
   if (!req.files) {
     return next(new ErrorResponse(`Please upload a file`, 400));
   }
 
   let files = [];
-
+  console.log(3);
   Array.isArray(req.files.image) === false
     ? files.push(req.files.image)
     : (files = [...req.files.image]);
 
+  console.log(3);
   for (let i = 0; i < files.length; i++) {
+    console.log(files[i]);
     // Make sure the image is a photo
     if (!files[i].mimetype.startsWith("image")) {
       console.log("MineType " + !files[i].mimetype);
       return next(new ErrorResponse(`Please upload a image file`, 400));
     }
 
+    console.log(4);
     // Check filesize
     if (files[i].size > process.env.MAX_FILE_UPLOAD)
       return next(
@@ -189,6 +193,7 @@ exports.productImageUpload = asyncHandler(async (req, res, next) => {
       product: req.params.id,
     });
 
+    console.log(5);
     files[i].name = `photo_${image._id}${path.parse(files[i].name).ext}`;
     image.path = files[i].name;
     await image.save();

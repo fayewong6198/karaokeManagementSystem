@@ -25,16 +25,7 @@ router
 // .post(createProduct);
 router.route("/:id").get(getProduct).put(updateProduct).delete(deleteProduct);
 
-router
-  .route("/:id/image")
-  .post(
-    checkImage.imageUpload,
-    protect,
-    roleProtect("admin"),
-    productImageUpload
-  )
-  .put(productImageUpload)
-  .delete(deleteProductImages);
+router.route("/:id/image").put(productImageUpload).delete(deleteProductImages);
 
 router.route("/:id/image/:imageId").delete(deleteProductImage);
 
